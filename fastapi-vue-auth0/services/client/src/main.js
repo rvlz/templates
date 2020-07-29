@@ -3,18 +3,21 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { Auth0Plugin } from './auth'
+import { onAuthenticationCallback } from './utils'
+import { domain, clientId, audience } from './config'
 
 Vue.use(Auth0Plugin, {
-  domain: process.env.VUE_APP_AUTH0_DOMAIN,
-  clientId: process.env.VUE_APP_AUTH0_CLIENT_ID,
-  audience: process.env.VUE_APP_AUTH0_AUDIENCE,
+  domain,
+  clientId,
+  audience,
   onRedirectCallback: appState => {
     router.push(
       appState && appState.targetUrl
         ? appState.targetUrl
         : window.location.pathname
     )
-  }
+  },
+  onAuthenticationCallback
 })
 
 Vue.config.productionTip = false
