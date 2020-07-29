@@ -1,0 +1,30 @@
+ARG INSTALL_PYTHON_VERSION=${INSTALL_PYTHON_VERSION:-3.8.2}
+FROM python:${INSTALL_PYTHON_VERSION}-slim
+
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN set -ex && \
+    apt-get update && \
+    apt-get -y install netcat && \
+    apt-get clean
+
+RUN mkdir /code
+WORKDIR /code
+
+COPY requirements requirements
+RUN pip install --upgrade pip && \
+    pip install -r requirements/stage.txt
+
+COPY app app
+COPY manage.py wsgi.py entrypoint.stage.sh ./
+RUN chmod +x entrypoint.stage.sh
+
+ARG APP_USER=appuser
+RUN useradd -m ${APP_USER}
+RUN chown -R ${APP_USER}:${APP_USER} /code
+USER ${APP_USER}
+ENV PATH="/home/${APP_USER}/.local/bin:${PATH}"
+
+EXPOSE 8000
+
+CMD ["./entrypoint.stage.sh"]
