@@ -90,6 +90,10 @@ export const useAuth0 = ({
       } finally {
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
+        if (this.isAuthenticated && options.onAuthenticationCallback) {
+          const token = await this.getTokenSilently()
+          await options.onAuthenticationCallback(this.user, token)
+        }
         this.loading = false
       }
     }
