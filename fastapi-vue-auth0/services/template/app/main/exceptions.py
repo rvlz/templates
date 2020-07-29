@@ -12,10 +12,7 @@ class AuthException(Exception):
 def auth_exception_handler(request: Request, exc: AuthException):
     return JSONResponse(
         status_code=exc.status_code,
-        content=dict(
-            code=exc.code,
-            description=exc.description,
-        ),
+        content=dict(code=exc.code, description=exc.description),
     )
 
 
@@ -26,10 +23,7 @@ class EmailTakenException(Exception):
 def email_taken_exception_handler(request: Request, exc: EmailTakenException):
     return JSONResponse(
         status_code=403,
-        content=dict(
-            code="email_taken",
-            description="Email already taken.",
-        ),
+        content=dict(code="email_taken", description="Email already taken."),
     )
 
 
@@ -38,8 +32,7 @@ class EmailNotVerifiedException(Exception):
 
 
 def email_not_verified_exception_handler(
-    request: Request,
-    exc: EmailNotVerifiedException
+    request: Request, exc: EmailNotVerifiedException
 ):
     return JSONResponse(
         status_code=403,
@@ -55,13 +48,9 @@ class UserNotFoundException(Exception):
 
 
 def user_not_found_exception_handler(
-    request: Request,
-    exc: UserNotFoundException
+    request: Request, exc: UserNotFoundException
 ):
     return JSONResponse(
         status_code=404,
-        content=dict(
-            code="user_not_found",
-            description="User not found."
-        )
+        content=dict(code="user_not_found", description="User not found."),
     )

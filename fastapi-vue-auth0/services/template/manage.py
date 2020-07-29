@@ -11,6 +11,7 @@ def test():
     import os
     import sys
     import pytest
+
     _environ = dict(os.environ)
     try:
         os.environ["APP_ENV"] = "test"
@@ -30,7 +31,7 @@ def init():
     from sqlalchemy import create_engine
 
     from app.main.database import Base
-    from app.main.api.user.models import User # noqa
+    from app.main.api.user.models import User  # noqa
 
     engine = create_engine(os.getenv("DATABASE_URL"))
     Base.metadata.create_all(bind=engine)
@@ -48,7 +49,6 @@ def drop_tables():
     tables = [User.__table__]
     engine = create_engine(os.getenv("DATABASE_URL"))
     Base.metadata.drop_all(bind=engine, tables=tables)
-
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ def create_session(database_url):
     return SessionLocal()
 
 
-def get_db(settings = Depends(get_settings)):
+def get_db(settings=Depends(get_settings)):
     db = create_session(settings.DATABASE_URL)
     try:
         yield db

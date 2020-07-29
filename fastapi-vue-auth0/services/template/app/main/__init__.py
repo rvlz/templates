@@ -5,10 +5,14 @@ from fastapi import FastAPI
 from .api.ping import router as ping_router
 from .api.user import router as user_router
 from .exceptions import (
-    AuthException, auth_exception_handler,
-    EmailTakenException, email_taken_exception_handler,
-    EmailNotVerifiedException, email_not_verified_exception_handler,
-    UserNotFoundException, user_not_found_exception_handler,
+    AuthException,
+    auth_exception_handler,
+    EmailTakenException,
+    email_taken_exception_handler,
+    EmailNotVerifiedException,
+    email_not_verified_exception_handler,
+    UserNotFoundException,
+    user_not_found_exception_handler,
 )
 
 
@@ -29,6 +33,8 @@ def register_exception_handlers(app):
     app.exception_handler(AuthException)(auth_exception_handler)
     app.exception_handler(EmailTakenException)(email_taken_exception_handler)
     app.exception_handler(EmailNotVerifiedException)(
-        email_not_verified_exception_handler)
+        email_not_verified_exception_handler
+    )
     app.exception_handler(UserNotFoundException)(
-        user_not_found_exception_handler)
+        user_not_found_exception_handler
+    )

@@ -23,11 +23,7 @@ class TestSettings(CommonSettings):
     DATABASE_URL: str
 
     class Config:
-        fields = {
-            "DATABASE_URL": {
-                "env": "DATABASE_TEST_URL"
-            }
-        }
+        fields = {"DATABASE_URL": {"env": "DATABASE_TEST_URL"}}
 
 
 class StagingSettings(CommonSettings):
@@ -40,10 +36,10 @@ class ProductionSettings(CommonSettings):
 
 def select_settings(environment="development"):
     settings = {
-      "development": DevelopmentSettings,
-      "test": TestSettings,
-      "staging": StagingSettings,
-      "production": ProductionSettings,
+        "development": DevelopmentSettings,
+        "test": TestSettings,
+        "staging": StagingSettings,
+        "production": ProductionSettings,
     }
     return settings[environment]()
 
