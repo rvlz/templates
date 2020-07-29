@@ -1,0 +1,75 @@
+version: "3.7"
+
+x-env-variables: &env-variables
+  APP_NAME: "template application"
+  APP_ENV: "development"
+  SECRET_KEY: ${SECRET_KEY}
+  VERSION: ${API_VERSION}
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@template-db:5432/api_dev
+  DATABASE_TEST_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@template-db:5432/api_test
+  AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+  AUTH0_API_AUDIENCE: ${AUTH0_API_AUDIENCE}
+  AUTH0_ALGORITHMS: ${AUTH0_ALGORITHMS}
+  AUTH0_CLAIMS_NAMESPACE: ${AUTH0_CUSTOM_CLAIMS_NAMESPACE}
+
+services:
+  client:
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/client:/code
+      - /code/node_modules
+    ports:
+      - 8081:8080
+    environment:
+      NODE_ENV: development
+      VUE_APP_API_SERVICE_URL: http://localhost/api/${API_VERSION}
+      VUE_APP_AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      VUE_APP_AUTH0_AUDIENCE: ${AUTH0_API_AUDIENCE}
+      VUE_APP_AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+    depends_on:
+      - template-api
+
+  template-api:
+    build:
+      context: ./services/template
+      dockerfile: Dockerfile
+      args:
+        INSTALL_PYTHON_VERSION: 3.8.2
+    volumes:
+      - ./services/template:/code
+    ports:
+      - 8001:8000
+    environment:
+      <<: *env-variables
+    depends_on:
+      - template-db
+
+  template-db:
+    build:
+      context: ./services/template/dev.db
+      dockerfile: Dockerfile
+      args:
+        INSTALL_POSTGRES_VERSION: 11.1
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  nginx:
+    build: 
+      context: ./services/nginx
+      dockerfile: Dockerfile
+      args:
+        INSTALL_NGINX_VERSION: 1.15.9
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - template-api
+      - client
+
+volumes:
+  postgres-data:

@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pytest
+click
+requests
+sqlalchemy
+psycopg2-binary
+python-jose
+flake8
+black

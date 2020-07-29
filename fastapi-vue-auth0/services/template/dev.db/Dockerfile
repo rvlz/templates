@@ -1,0 +1,4 @@
+ARG INSTALL_POSTGRES_VERSION=${INSTALL_POSTGRES_VERSION:-11.1}
+FROM postgres:${INSTALL_POSTGRES_VERSION}-alpine
+
+COPY init.sql /docker-entrypoint-initdb.d
