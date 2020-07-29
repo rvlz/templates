@@ -1,3 +1,3 @@
 <template>
-  <div>Profile<p>{{ $auth.user.email }}</p></div>
+  <div>Profile<p>{{ $store.state.profile.email }}</p></div>
 </template>
