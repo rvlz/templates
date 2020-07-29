@@ -1,0 +1,22 @@
+sudo: required
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.25.4
+  SECRET_KEY: 'secret_key'
+  API_VERSION: 'v1'
+  POSTGRES_USER: 'docker_user'
+  POSTGRES_PASSWORD: 'docker_password'
+  AUTH0_DOMAIN: template.us.auth0.com
+  AUTH0_API_AUDIENCE: https://apidev.com
+  AUTH0_ALGORITHMS: '["RS256"]'
+  AUTH0_CLIENT_ID: clientid
+  AUTH0_CUSTOM_CLAIMS_NAMESPACE: https://template.com
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+script:
+  - bash scripts/test.sh
