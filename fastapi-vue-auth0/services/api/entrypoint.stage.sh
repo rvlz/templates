@@ -1,6 +1,6 @@
 #!/bin/sh
 
-while ! nc -z template-db 5432; do
+while ! nc -z api-db 5432; do
   sleep 0.1
 done
 

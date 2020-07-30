@@ -5,8 +5,8 @@ x-env-variables: &env-variables
   APP_ENV: "staging"
   SECRET_KEY: ${SECRET_KEY}
   VERSION: ${API_VERSION}
-  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@template-db:5432/api_dev
-  DATABASE_TEST_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@template-db:5432/api_test
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@api-db:5432/api_dev
+  DATABASE_TEST_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@api-db:5432/api_test
   AUTH0_DOMAIN: ${AUTH0_DOMAIN}
   AUTH0_API_AUDIENCE: ${AUTH0_API_AUDIENCE}
   AUTH0_ALGORITHMS: ${AUTH0_ALGORITHMS}
@@ -24,22 +24,22 @@ services:
         VUE_APP_AUTH0_AUDIENCE: ${AUTH0_API_AUDIENCE}
         VUE_APP_AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
     depends_on:
-      - template-api
+      - api
 
-  template-api:
+  api:
     build:
-      context: ./services/template
+      context: ./services/api
       dockerfile: Dockerfile.stage
       args:
         INSTALL_PYTHON_VERSION: 3.8.2
     environment:
       <<: *env-variables
     depends_on:
-      - template-db
+      - api-db
 
-  template-db:
+  api-db:
     build:
-      context: ./services/template/dev.db
+      context: ./services/api/dev.db
       dockerfile: Dockerfile
       args:
         INSTALL_POSTGRES_VERSION: 11.1
@@ -59,7 +59,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - template-api
+      - api
       - client
 
 volumes:

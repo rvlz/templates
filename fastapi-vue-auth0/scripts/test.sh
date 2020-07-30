@@ -11,11 +11,11 @@ inspect() {
 
 test_api() {
   docker-compose up -d --build
-  docker-compose exec template-api python manage.py init
-  docker-compose exec template-api python manage.py test
-  inspect $? template-api
-  docker-compose exec template-api flake8 app manage.py
-  inspect $? template-lint
+  docker-compose exec api python manage.py init
+  docker-compose exec api python manage.py test
+  inspect $? api
+  docker-compose exec api flake8 app manage.py
+  inspect $? api-lint
   docker-compose down -v
 }
 
@@ -28,11 +28,11 @@ test_client() {
 
 test_all() {
   docker-compose up -d --build
-  docker-compose exec template-api python manage.py init
-  docker-compose exec template-api python manage.py test
-  inspect $? template-api
-  docker-compose exec template-api flake8 app manage.py
-  inspect $? template-lint
+  docker-compose exec api python manage.py init
+  docker-compose exec api python manage.py test
+  inspect $? api
+  docker-compose exec api flake8 app manage.py
+  inspect $? api-lint
   docker-compose exec client yarn test:unit
   inspect $? client
   docker-compose down -v
