@@ -1,1 +1,1 @@
-# Dockerized FastAPI Vue.js Application
+# Dockerized FastAPI Vue.js Application with Auth0
